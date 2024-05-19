@@ -1,4 +1,4 @@
-import { APIResponse } from "types/api";
+import { APIResponse } from "@types";
 import API from "..";
 
 type HealthCheckResponse = {

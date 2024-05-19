@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { APIResponse } from "types/api";
+import { APIResponse } from "@types";
 
 export default class API {
   private api = window.api;
