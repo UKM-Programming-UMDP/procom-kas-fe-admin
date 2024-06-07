@@ -1,6 +1,6 @@
-import HomeLayout from "@layouts/Home";
 import theme from "./theme";
 import { ThemeProvider } from "@mui/material";
+import HomeLayout from "@pages/Home/layout";
 import { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 

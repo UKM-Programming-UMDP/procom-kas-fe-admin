@@ -3,8 +3,8 @@ import { useHomeContext } from "./context";
 // import useHome from "./hooks/useHome";
 import ReactLoading from "react-loading";
 import Taskbar from "./partials/Taskbar";
-import DashboardLayout from "@layouts/Dashboard";
-import BalanceHistoryLayout from "@layouts/BalanceHistory";
+import BalanceHistoryLayout from "@pages/BalanceHistory/layout";
+import DashboardLayout from "@pages/Dashboard/layout";
 
 const Home = () => {
   const { state } = useHomeContext();
