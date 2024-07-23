@@ -36,7 +36,10 @@ export default class APIInstance {
       if (isAxiosError(err)) {
         return err?.response?.data;
       } else {
-        return err;
+        return {
+          status: false,
+          message: "Internal Server Error"
+        } as APIResponse<T>;
       }
     }
   }
@@ -49,7 +52,10 @@ export default class APIInstance {
       if (isAxiosError(err)) {
         return err?.response?.data;
       } else {
-        return err;
+        return {
+          status: false,
+          message: "Internal Server Error"
+        } as APIResponse<T>;
       }
     }
   }
@@ -62,7 +68,10 @@ export default class APIInstance {
       if (isAxiosError(err)) {
         return err?.response?.data;
       } else {
-        return err;
+        return {
+          status: false,
+          message: "Internal Server Error"
+        } as APIResponse<T>;
       }
     }
   }
@@ -75,7 +84,10 @@ export default class APIInstance {
       if (isAxiosError(err)) {
         return err?.response?.data;
       } else {
-        return err;
+        return {
+          status: false,
+          message: "Internal Server Error"
+        } as APIResponse<T>;
       }
     }
   }
