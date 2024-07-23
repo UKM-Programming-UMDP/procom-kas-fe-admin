@@ -1,7 +1,7 @@
-import { APIResponse } from "@types";
+import { FetchCallback } from "@types";
 import APIInstance from "..";
 
-export type GetBalanceHistory = {
+export type BalanceHistoryModel = {
   amount: number;
   activity: "Add" | "Substract";
   note: string;
@@ -16,10 +16,13 @@ export default class BalanceHistoryServices {
   private api: APIInstance = new APIInstance();
   private basePath = "/v1/balance/history";
 
-  async get() {
-    const res: APIResponse<GetBalanceHistory[]> = await this.api.GET(
-      this.basePath
-    );
-    return res;
+  async fetchBalanceHistory(callback: FetchCallback<BalanceHistoryModel[]>) {
+    const res = await this.api.GET<BalanceHistoryModel[]>(this.basePath);
+    if (!res || !res.status) {
+      callback.onError(res?.message || "Failed to fetch balance history");
+    } else {
+      callback.onSuccess(res.data);
+    }
+    callback.onFullfilled && callback.onFullfilled();
   }
 }

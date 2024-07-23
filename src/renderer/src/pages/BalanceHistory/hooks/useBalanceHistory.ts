@@ -10,16 +10,18 @@ const useBalanceHistory = (): HookReturn => {
 
   const fetchBalanceHistory = async () => {
     setState((prev) => ({ ...prev, balanceHistoryLoading: true }));
-    const res = await balanceHistoryServices.get();
-    if (!res || !res.status) {
-      setState((prev) => ({ ...prev, balanceHistoryLoading: false }));
-      return;
-    }
-    setState((prev) => ({
-      ...prev,
-      balanceHistory: res.data,
-      balanceHistoryLoading: false
-    }));
+    balanceHistoryServices.fetchBalanceHistory({
+      onSuccess: (data) => {
+        setState((prev) => ({
+          ...prev,
+          balanceHistory: data,
+          balanceHistoryLoading: false
+        }));
+      },
+      onError: () => {
+        setState((prev) => ({ ...prev, balanceHistoryLoading: false }));
+      }
+    });
   };
 
   return {

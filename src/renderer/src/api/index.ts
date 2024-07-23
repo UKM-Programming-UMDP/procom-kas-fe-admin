@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { APIResponse } from "@types";
 
 export default class APIInstance {
@@ -9,11 +7,11 @@ export default class APIInstance {
     return await this.api.GET(path);
   }
 
-  async POST<T>(path: string, data: any): Promise<APIResponse<T>> {
+  async POST<T>(path: string, data: T): Promise<APIResponse<T>> {
     return await this.api.POST(path, data);
   }
 
-  async PUT<T>(path: string, data: any): Promise<APIResponse<T>> {
+  async PUT<T>(path: string, data: T): Promise<APIResponse<T>> {
     return await this.api.PUT(path, data);
   }
 

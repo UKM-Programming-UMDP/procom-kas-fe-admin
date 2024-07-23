@@ -11,3 +11,9 @@ export type AppList = {
 
 export type APIResponse<T> = GlobalAPIResponse<T>;
 export type APIFieldError = GlobalAPIFieldError;
+
+export type FetchCallback<T> = {
+  onSuccess: (data: T) => void;
+  onError: (errMessage: string) => void;
+  onFullfilled?: () => void;
+};

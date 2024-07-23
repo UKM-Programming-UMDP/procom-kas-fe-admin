@@ -12,17 +12,18 @@ const useHome = (): HookReturn => {
 
   const checkServerStatus = async () => {
     setState((prev) => ({ ...prev, isServerUpLoading: true }));
-    const res = await commonServices.healthCheck();
-    if (!res || !res.status) {
-      setState((prev) => ({ ...prev, isServerUpLoading: false }));
-      // handle error
-      return;
-    }
-    setState((prev) => ({
-      ...prev,
-      isServerUp: true,
-      isServerUpLoading: false
-    }));
+    commonServices.healthCheck({
+      onSuccess: () => {
+        setState((prev) => ({
+          ...prev,
+          isServerUp: true,
+          isServerUpLoading: false
+        }));
+      },
+      onError: () => {
+        setState((prev) => ({ ...prev, isServerUpLoading: false }));
+      }
+    });
   };
 
   const handleChangeApp = (app: AppType) => {

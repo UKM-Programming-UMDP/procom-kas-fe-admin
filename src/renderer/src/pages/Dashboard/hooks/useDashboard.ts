@@ -9,17 +9,28 @@ const useDashboard = (): HookReturn => {
   const balanceServices = new BalanceServices();
 
   const fetchBalance = async () => {
-    setState((prev) => ({ ...prev, balanceLoading: true }));
-    const res = await balanceServices.fetchBalance();
-    if (!res || !res.status) {
-      setState((prev) => ({ ...prev, balanceLoading: false }));
-      return;
-    }
     setState((prev) => ({
       ...prev,
-      balance: res.data,
-      balanceLoading: false
+      balanceLoading: true
     }));
+
+    balanceServices.fetchBalance({
+      onSuccess: (data) => {
+        setState((prev) => ({
+          ...prev,
+          balance: data,
+          balanceLoading: false
+        }));
+      },
+      onError: (errMessage) => {
+        console.log(errMessage);
+        // handle error here
+        setState((prev) => ({
+          ...prev,
+          balanceLoading: false
+        }));
+      }
+    });
   };
 
   return {
