@@ -9,13 +9,13 @@ import axios, {
 } from "axios";
 import { APIResponse } from "../../types/api";
 
-type Headers = {
+type BaseHeaders = {
   Accept: string;
   "Content-type": string;
 };
 
 export default class APIInstance {
-  headers: Headers = {
+  headers: BaseHeaders = {
     Accept: "application/json",
     "Content-type": "application/json"
   };
@@ -23,7 +23,7 @@ export default class APIInstance {
 
   constructor() {
     this.api = axios.create({
-      baseURL: import.meta.env.MAIN_VITE_BACKEND_URL + "/api",
+      baseURL: import.meta.env.MAIN_VITE_BACKEND_URL,
       headers: this.headers as unknown as AxiosHeaders
     } as AxiosRequestConfig);
   }

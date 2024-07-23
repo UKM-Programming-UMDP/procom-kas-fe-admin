@@ -10,7 +10,7 @@ const useDashboard = (): HookReturn => {
 
   const fetchBalance = async () => {
     setState((prev) => ({ ...prev, balanceLoading: true }));
-    const res = await balanceServices.get();
+    const res = await balanceServices.fetchBalance();
     if (!res || !res.status) {
       setState((prev) => ({ ...prev, balanceLoading: false }));
       return;

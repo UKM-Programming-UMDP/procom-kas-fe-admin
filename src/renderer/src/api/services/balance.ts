@@ -1,18 +1,17 @@
 import { APIResponse } from "@types";
-import API from "..";
+import APIInstance from "..";
 
 export type GetBalance = {
   balance: number;
   updated_at: string;
 };
 
-export default class BalanceServices {
-  private api: API = new API();
-  private basePath: string = "/balance";
+export default class BalanceServices extends APIInstance {
+  private basePath: string = "/v1/balance";
 
-  async get() {
+  async fetchBalance() {
     const targetPath = this.basePath;
-    const res: APIResponse<GetBalance> = await this.api.GET(targetPath);
+    const res: APIResponse<GetBalance> = await this.GET(targetPath);
     return res;
   }
 }

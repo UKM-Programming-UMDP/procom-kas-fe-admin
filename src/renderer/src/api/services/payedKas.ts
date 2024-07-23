@@ -1,5 +1,5 @@
 import { APIResponse } from "@types";
-import API from "..";
+import APIInstance from "..";
 
 export type GetPayedKas = {
   submission_id: string;
@@ -21,8 +21,8 @@ export type GetPayedKas = {
 };
 
 export default class PayedKasService {
-  basePath: string = "/kas";
-  private api: API = new API();
+  basePath: string = "/v1/kas-submissions";
+  private api: APIInstance = new APIInstance();
 
   async get() {
     const targetPath = this.basePath + "?sort=created_at&order_by=desc";

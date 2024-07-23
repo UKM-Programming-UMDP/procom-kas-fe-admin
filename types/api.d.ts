@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface APIInstanceInterface {
   GET<T>(path: string): Promise<APIResponse<T>>;
-  POST<T>(path: string, data: any): Promise<APIResponse<T>>;
-  PUT<T>(path: string, data: any): Promise<APIResponse<T>>;
+  POST<T>(path: string, data: T): Promise<APIResponse<T>>;
+  PUT<T>(path: string, data: T): Promise<APIResponse<T>>;
   DELETE<T>(path: string): Promise<APIResponse<T>>;
 }
 

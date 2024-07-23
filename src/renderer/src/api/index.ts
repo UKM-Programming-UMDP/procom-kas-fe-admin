@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { APIResponse } from "@types";
 
-export default class API {
+export default class APIInstance {
   private api = window.api;
 
   async GET<T>(path: string): Promise<APIResponse<T>> {

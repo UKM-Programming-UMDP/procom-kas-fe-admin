@@ -1,5 +1,5 @@
 import { APIResponse } from "@types";
-import API from "..";
+import APIInstance from "..";
 
 type HealthCheckResponse = {
   balance: number;
@@ -7,12 +7,12 @@ type HealthCheckResponse = {
 };
 
 export default class CommonServices {
-  private api: API = new API();
+  private api: APIInstance = new APIInstance();
 
   // Because there is no route yet for health check, this is just a placeholder
   async healthCheck() {
     const res: APIResponse<HealthCheckResponse> =
-      await this.api.GET("/balance");
+      await this.api.GET("/v1/balance");
     return res;
   }
 }

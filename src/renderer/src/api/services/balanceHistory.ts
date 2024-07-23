@@ -1,5 +1,5 @@
 import { APIResponse } from "@types";
-import API from "..";
+import APIInstance from "..";
 
 export type GetBalanceHistory = {
   amount: number;
@@ -13,8 +13,8 @@ export type GetBalanceHistory = {
 };
 
 export default class BalanceHistoryServices {
-  private api: API = new API();
-  private basePath = "/balance/history";
+  private api: APIInstance = new APIInstance();
+  private basePath = "/v1/balance/history";
 
   async get() {
     const res: APIResponse<GetBalanceHistory[]> = await this.api.GET(
