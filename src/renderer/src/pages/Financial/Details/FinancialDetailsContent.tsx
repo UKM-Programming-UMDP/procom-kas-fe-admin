@@ -3,7 +3,10 @@ import { DownloadButton } from "@components/Button";
 import ImagePreview from "@components/ImagePreview";
 import Popover from "@components/Popover";
 import { Info } from "@mui/icons-material";
+import { Tooltip } from "@mui/material";
 import { rupiahFormatter } from "@utils/stringParser";
+import clsx from "clsx";
+import moment from "moment";
 
 interface Props {
   currentFinreq: FinancialModel;
@@ -18,11 +21,23 @@ const FinancialDetailsContent = (props: Props) => {
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="pe-1 flex gap-2 items-baseline">
-        <span className="text-xl w-fit ">{currentFinreq.request_id}</span>
-        <span className="text-sm">({currentFinreq.payment.status.name})</span>
+      <div className="flex justify-between items-baseline">
+        <div className="pe-1 flex gap-2 items-baseline h-fit mt-auto pb-1.5">
+          <span className="text-xl w-fit ">{currentFinreq.request_id}</span>
+          <span className="text-sm">({currentFinreq.payment.status.name})</span>
+        </div>
+        <div className="text-end">
+          <span className={clsx(labelClass, "text-2xs")}>Created At</span>
+          <div className="-mt-1">
+            <Tooltip title={currentFinreq.created_at} arrow>
+              <span className="text-xs">
+                {moment(currentFinreq.created_at).format("MMM, DD YYYY")}
+              </span>
+            </Tooltip>
+          </div>
+        </div>
       </div>
-      <div className="flex gap-8">
+      <div className="flex gap-8 -mt-1">
         <div>
           <span className={labelClass}>Amount</span>
           <div className="-mt-1">
