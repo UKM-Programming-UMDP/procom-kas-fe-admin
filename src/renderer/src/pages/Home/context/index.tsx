@@ -16,7 +16,7 @@ type StateType = {
 };
 
 export const initialState: StateType = {
-  app: "dashboard",
+  app: "financial request",
   isServerUp: false,
   isServerUpLoading: false
 };

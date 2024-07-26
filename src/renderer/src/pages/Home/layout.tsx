@@ -5,18 +5,22 @@ import ReactLoading from "react-loading";
 import Taskbar from "./partials/Taskbar";
 import BalanceHistory from "@pages/BalanceHistory";
 import Dashboard from "@pages/Dashboard";
+import Financial from "@pages/Financial";
 
 const HomeLayout = () => {
   const { state } = useHomeContext();
   // const { checkServerStatus } = useHome();
 
   useEffect(() => {
+    // temporary disable for development,
+    // to avoid slow initial load
     // checkServerStatus();
   }, []);
 
   const appList = {
     dashboard: <Dashboard />,
-    "balance history": <BalanceHistory />
+    "balance history": <BalanceHistory />,
+    "financial request": <Financial />
   };
 
   if (state.isServerUpLoading)
@@ -28,8 +32,10 @@ const HomeLayout = () => {
 
   return (
     <div className="h-full flex flex-col">
-      <div className="h-full">{appList[state.app]}</div>
-      <div className="bg-zinc-900/85 h-12 flex">
+      <div className="h-[93%] relative" style={{ userSelect: "text" }}>
+        {appList[state.app]}
+      </div>
+      <div className="bg-zinc-900/85 h-[7%] flex">
         <Taskbar />
       </div>
     </div>

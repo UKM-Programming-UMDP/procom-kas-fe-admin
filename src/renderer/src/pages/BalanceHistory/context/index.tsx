@@ -1,4 +1,4 @@
-import { GetBalanceHistory } from "@services/balanceHistory";
+import { BalanceHistoryModel } from "@api/balance/model";
 import {
   Dispatch,
   FC,
@@ -10,7 +10,7 @@ import {
 } from "react";
 
 type StateType = {
-  balanceHistory: GetBalanceHistory[];
+  balanceHistory: BalanceHistoryModel[];
   balanceHistoryLoading: boolean;
 };
 

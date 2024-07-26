@@ -1,16 +1,16 @@
+import BalanceService from "@api/balance/service";
 import { useBalanceHistoryContext } from "../context";
-import BalanceHistoryServices from "@services/balanceHistory";
 
 interface HookReturn {
   fetchBalanceHistory: () => void;
 }
 const useBalanceHistory = (): HookReturn => {
   const { setState } = useBalanceHistoryContext();
-  const balanceHistoryServices = new BalanceHistoryServices();
+  const balanceService = new BalanceService();
 
   const fetchBalanceHistory = async () => {
     setState((prev) => ({ ...prev, balanceHistoryLoading: true }));
-    balanceHistoryServices.fetchBalanceHistory({
+    balanceService.fetchBalanceHistory({
       onSuccess: (data) => {
         setState((prev) => ({
           ...prev,
