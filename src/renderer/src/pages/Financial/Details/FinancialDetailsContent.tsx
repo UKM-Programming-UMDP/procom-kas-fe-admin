@@ -14,8 +14,6 @@ interface Props {
 const FinancialDetailsContent = (props: Props) => {
   const { currentFinreq } = props;
 
-  console.log(currentFinreq.payment.evidence);
-
   const labelClass =
     "text-xs border-b text-gray-200/80 border-gray-200/60 opacity-90";
 
