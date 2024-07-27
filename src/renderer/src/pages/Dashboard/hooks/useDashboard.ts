@@ -1,25 +1,36 @@
-import BalanceServices from "@services/balance";
+import BalanceService from "@api/balance/service";
 import { useDashboardContext } from "../context";
+import { snackbar } from "@utils/snackbar";
 
 interface HookReturn {
   fetchBalance: () => void;
 }
 const useDashboard = (): HookReturn => {
   const { setState } = useDashboardContext();
-  const balanceServices = new BalanceServices();
+  const balanceService = new BalanceService();
 
   const fetchBalance = async () => {
-    setState((prev) => ({ ...prev, balanceLoading: true }));
-    const res = await balanceServices.get();
-    if (!res || !res.status) {
-      setState((prev) => ({ ...prev, balanceLoading: false }));
-      return;
-    }
     setState((prev) => ({
       ...prev,
-      balance: res.data,
-      balanceLoading: false
+      balanceLoading: true
     }));
+
+    balanceService.fetchBalance({
+      onSuccess: (data) => {
+        setState((prev) => ({
+          ...prev,
+          balance: data,
+          balanceLoading: false
+        }));
+      },
+      onError: (errMessage) => {
+        snackbar.error(errMessage);
+        setState((prev) => ({
+          ...prev,
+          balanceLoading: false
+        }));
+      }
+    });
   };
 
   return {

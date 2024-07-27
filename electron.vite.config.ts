@@ -19,7 +19,7 @@ export default defineConfig({
         "@pages": resolve(__dirname, "src/renderer/src/pages"),
         "@layouts": resolve(__dirname, "src/renderer/src/layouts"),
         "@assets": resolve(__dirname, "src/renderer/src/assets"),
-        "@services": resolve(__dirname, "src/renderer/src/api/services")
+        "@api": resolve(__dirname, "src/renderer/src/api")
       }
     },
     plugins: [react()]

@@ -1,9 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface APIInstanceInterface {
-  GET<T>(path: string): Promise<APIResponse<T>>;
-  POST<T>(path: string, data: any): Promise<APIResponse<T>>;
-  PUT<T>(path: string, data: any): Promise<APIResponse<T>>;
+  GET<T>(path: string, params?: FetchParams): Promise<APIResponse<T>>;
+  POST<T, U = T>(path: string, data: T): Promise<APIResponse<U>>;
+  PUT<T, U = T>(path: string, data: T): Promise<APIResponse<U>>;
   DELETE<T>(path: string): Promise<APIResponse<T>>;
+  POSTFORM<T>(path: string, data: File): Promise<APIResponse<T>>;
 }
 
 export type APIResponse<T = void> = {
@@ -12,9 +12,23 @@ export type APIResponse<T = void> = {
   message: string;
   errors: APIFieldError[];
   data: T;
-} | null;
+  pagination: Pagination;
+};
 
 export type APIFieldError = {
   field: string;
   message: string;
+};
+
+export type FetchParams = {
+  params: {
+    [key: string]: string | number;
+  };
+};
+
+export type Pagination = {
+  page: number;
+  limit: number;
+  total_pages: number;
+  total_items: number;
 };

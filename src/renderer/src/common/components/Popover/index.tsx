@@ -5,63 +5,98 @@ interface Props {
   renderButton?: () => JSX.Element;
   buttonComponent?: JSX.Element;
   children: JSX.Element;
-  position: "bottom" | "right";
+  position: "topLeft" | "topRight" | "bottomLeft" | "bottomRight";
+  transform: "topLeft" | "topRight" | "bottomLeft" | "bottomRight";
+  trigger?: "click" | "hover";
 }
+
 function Popover(props: Props): JSX.Element {
-  const { renderButton, children, buttonComponent, position } = props;
+  const {
+    renderButton,
+    children,
+    buttonComponent,
+    position,
+    transform,
+    trigger = "click"
+  } = props;
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
-  const [anchorEl, setAnchorEl] = useState(null);
+  const handleClick = (event: React.MouseEvent<HTMLElement>): void => {
+    if (anchorEl) {
+      setAnchorEl(null);
+    } else {
+      setAnchorEl(event.currentTarget);
+    }
+  };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleClick = (event: any): void => {
+  const handleMouseEnter = (event: React.MouseEvent<HTMLElement>): void => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = (): void => {
+  const handleMouseLeave = (): void => {
     setAnchorEl(null);
   };
 
   const open = Boolean(anchorEl);
-  const id = open ? "date-range-v2-popover" : undefined;
+  const id = open ? "react-popover" : undefined;
 
-  const anchorPosition: {
-    vertical: "top" | "bottom";
-    horizontal: "left" | "right";
-  } =
-    position === "bottom"
-      ? {
-          vertical: "bottom",
-          horizontal: "left"
-        }
-      : {
-          vertical: "top",
-          horizontal: "right"
-        };
+  const positionMap = {
+    topLeft: { vertical: "top", horizontal: "left" } as Position,
+    topRight: { vertical: "top", horizontal: "right" } as Position,
+    bottomLeft: { vertical: "bottom", horizontal: "left" } as Position,
+    bottomRight: { vertical: "bottom", horizontal: "right" } as Position
+  };
+
+  const anchorPosition = positionMap[position];
+  const transformPosition = positionMap[transform];
 
   return (
-    <div>
-      <div aria-describedby={id} onClick={handleClick}>
+    <>
+      <div
+        aria-describedby={id}
+        onClick={trigger === "click" ? handleClick : undefined}
+        onMouseEnter={trigger === "hover" ? handleMouseEnter : undefined}
+        onMouseLeave={trigger === "hover" ? handleMouseLeave : undefined}
+      >
         {(renderButton && renderButton()) || buttonComponent}
       </div>
       <MUIPopover
         id={id}
         open={open}
         anchorEl={anchorEl}
-        onClose={handleClose}
+        onClose={handleMouseLeave}
         anchorOrigin={{
           vertical: anchorPosition.vertical,
           horizontal: anchorPosition.horizontal
         }}
-        PaperProps={{
-          style: {
-            backgroundColor: "transparent"
-          }
+        transformOrigin={{
+          vertical: transformPosition.vertical,
+          horizontal: transformPosition.horizontal
+        }}
+        sx={{
+          pointerEvents: trigger === "hover" ? "none" : "auto",
+          fontSize: "0.8rem",
+          "& .MuiPopover-paper": {
+            backgroundColor: "rgba(70, 70, 70, 0.95)",
+            backdropFilter: "blur(20px)",
+            WebkitBackdropFilter: "blur(20px)",
+            border: "1px solid #353535",
+            color: "#fff",
+            boxShadow: "5px -4px 40px -10px rgba(0,0,0,0.4)",
+            pointerEvents: "auto"
+          },
+          userSelect: "text"
         }}
       >
         {children}
       </MUIPopover>
-    </div>
+    </>
   );
 }
+
+type Position = {
+  vertical: "top" | "bottom";
+  horizontal: "left" | "right";
+};
 
 export default Popover;

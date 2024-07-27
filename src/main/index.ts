@@ -54,8 +54,8 @@ app.whenReady().then(() => {
 
   const api = new API();
 
-  ipcMain.handle("api-get", async (_, path) => {
-    return await api.GET(path);
+  ipcMain.handle("api-get", async (_, path, params) => {
+    return await api.GET(path, params);
   });
 
   ipcMain.handle("api-post", async (_, path, data) => {
@@ -68,6 +68,10 @@ app.whenReady().then(() => {
 
   ipcMain.handle("api-delete", async (_, path) => {
     return await api.DELETE(path);
+  });
+
+  ipcMain.handle("api-postform", async (_, path, data) => {
+    return await api.POSTFORM(path, data);
   });
 
   createWindow();

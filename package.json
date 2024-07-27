@@ -26,12 +26,20 @@
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@fontsource/roboto": "^5.0.13",
+    "@hookform/resolvers": "^3.9.0",
     "@mui/icons-material": "^5.15.18",
     "@mui/material": "^5.15.18",
-    "axios": "^1.6.8",
+    "axios": "^1.7.2",
+    "clsx": "^2.1.1",
+    "form-data": "^4.0.0",
     "framer-motion": "^11.2.4",
+    "notistack": "^3.0.1",
+    "react-dropzone": "^14.2.3",
+    "react-hook-form": "^7.52.1",
     "react-loading": "^2.0.3",
-    "react-loading-skeleton": "^3.4.0"
+    "react-loading-skeleton": "^3.4.0",
+    "react-simple-image-viewer": "^1.2.2",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config-prettier": "^2.0.0",
