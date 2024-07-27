@@ -1,11 +1,13 @@
 import AppCard from "@components/Card/AppCard";
-import { CurrencyExchange, Home } from "@mui/icons-material";
+import { CurrencyExchange, Home, MonetizationOn } from "@mui/icons-material";
 import { AppList } from "@types";
 import { appDisplayName } from "@utils/consts";
 import useHome from "../hooks/useHome";
-import AppearFadeIn from "@components/Animation/AppearFadeIn";
+import { AppearFadeIn } from "@components/Animation";
+import { useHomeContext } from "../context";
 
 const Taskbar = () => {
+  const { state } = useHomeContext();
   const { handleChangeApp } = useHome();
 
   const appList: AppList[] = [
@@ -18,6 +20,11 @@ const Taskbar = () => {
       displayName: appDisplayName["balance history"],
       icon: <CurrencyExchange fontSize="small" />,
       appName: "balance history"
+    },
+    {
+      displayName: appDisplayName["financial request"],
+      icon: <MonetizationOn fontSize="small" />,
+      appName: "financial request"
     }
   ];
 
@@ -29,6 +36,7 @@ const Taskbar = () => {
             displayName={app.displayName}
             icon={app.icon}
             onClick={() => handleChangeApp(app.appName)}
+            isActive={state.app === app.appName}
           />
         </AppearFadeIn>
       ))}

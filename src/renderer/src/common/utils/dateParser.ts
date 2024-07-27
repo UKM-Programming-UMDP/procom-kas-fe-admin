@@ -1,6 +1,6 @@
 import moment, { Moment } from "moment";
 
-export function parseDateFromNow(date: Moment): string {
+export function parseDateFromNow(date: Moment | string): string {
   const replacer = [
     [" seconds", "s"],
     [" minutes", "m"],
@@ -10,7 +10,6 @@ export function parseDateFromNow(date: Moment): string {
     [" years", "y"]
   ];
   let fromNow = moment(date).fromNow();
-  console.log(fromNow);
   replacer.forEach(([from, to]) => {
     fromNow = fromNow.replace(from, to);
   });

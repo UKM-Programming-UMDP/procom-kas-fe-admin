@@ -1,7 +1,7 @@
 import { Button, CircularProgress } from "@mui/material";
 
 interface Props {
-  onClick: () => void;
+  onClick?: () => void;
   disabledLoading?: boolean;
   submitLoading?: boolean;
   icon?: React.ReactNode;
@@ -19,9 +19,9 @@ function ActionButton(props: Props): JSX.Element {
     submitLoading,
     icon,
     label,
-    variant,
-    size,
-    color,
+    variant = "contained",
+    size = "small",
+    color = "inherit",
     className,
     autoFocus
   } = props;
@@ -29,11 +29,11 @@ function ActionButton(props: Props): JSX.Element {
   return (
     <Button
       variant={variant}
-      color={color || "primary"}
+      color={color}
       onClick={onClick}
       disabled={disabledLoading || submitLoading}
-      size={size || "small"}
-      className={"focus:ring-2 focus:ring-white " + className}
+      size={size}
+      className={className}
       autoFocus={autoFocus || false}
       disableRipple
     >
