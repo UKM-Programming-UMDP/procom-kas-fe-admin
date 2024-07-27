@@ -1,4 +1,4 @@
-import CommonServices from "@services/common";
+import CommonService from "@api/common/service";
 import { useHomeContext } from "../context";
 import { AppType } from "@types";
 
@@ -8,21 +8,22 @@ interface HookReturn {
 }
 const useHome = (): HookReturn => {
   const { setState } = useHomeContext();
-  const commonServices = new CommonServices();
+  const commonService = new CommonService();
 
   const checkServerStatus = async () => {
     setState((prev) => ({ ...prev, isServerUpLoading: true }));
-    const res = await commonServices.healthCheck();
-    if (!res || !res.status) {
-      setState((prev) => ({ ...prev, isServerUpLoading: false }));
-      // handle error
-      return;
-    }
-    setState((prev) => ({
-      ...prev,
-      isServerUp: true,
-      isServerUpLoading: false
-    }));
+    commonService.healthCheck({
+      onSuccess: () => {
+        setState((prev) => ({
+          ...prev,
+          isServerUp: true,
+          isServerUpLoading: false
+        }));
+      },
+      onError: () => {
+        setState((prev) => ({ ...prev, isServerUpLoading: false }));
+      }
+    });
   };
 
   const handleChangeApp = (app: AppType) => {

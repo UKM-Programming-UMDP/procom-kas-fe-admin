@@ -1,4 +1,5 @@
-import AppearFadeIn from "@components/Animation/AppearFadeIn";
+import { AppearFadeIn } from "@components/Animation";
+import clsx from "clsx";
 
 interface ScreenCardProps {
   className?: string;
@@ -17,7 +18,10 @@ const ScreenCard = (props: ScreenCardProps) => {
       <AppearFadeIn
         direction="bottom"
         delay={0.3}
-        className={`bg-zinc-800/20 border border-zinc-900/30 rounded h-full p-5 px-6 ${cardClassName}`}
+        className={clsx(
+          "pt-2 px-6 bg-zinc-800/20 border border-zinc-900/30 rounded h-full max-h-[85vh] overflow-y-scroll",
+          cardClassName
+        )}
       >
         {children}
       </AppearFadeIn>

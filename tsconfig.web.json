@@ -18,7 +18,7 @@
       "@pages/*": ["src/renderer/src/pages/*"],
       "@layouts/*": ["src/renderer/src/layouts/*"],
       "@assets/*": ["src/renderer/src/assets/*"],
-      "@services/*": ["src/renderer/src/api/services/*"]
+      "@api/*": ["src/renderer/src/api/*"]
     },
   }
 }

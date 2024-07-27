@@ -1,4 +1,4 @@
-import { GetBalance } from "@services/balance";
+import { BalanceModel } from "@api/balance/model";
 import {
   Dispatch,
   FC,
@@ -10,12 +10,12 @@ import {
 } from "react";
 
 type StateType = {
-  balance: GetBalance;
+  balance: BalanceModel;
   balanceLoading: boolean;
 };
 
 export const initialState: StateType = {
-  balance: {} as GetBalance,
+  balance: {} as BalanceModel,
   balanceLoading: false
 };
 
