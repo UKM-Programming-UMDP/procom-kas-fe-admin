@@ -7,7 +7,7 @@ import {
   TablePagination,
   TableRow
 } from "@components/Table";
-import { useFinancialContext } from "../context";
+import { StatusIcon, useFinancialContext } from "../context";
 import { parseDateFromNow } from "@utils/dateParser";
 import { rupiahFormatter } from "@utils/stringParser";
 import useFinancialList from "./hooks/useFinancialList";
@@ -38,7 +38,7 @@ const FinancialTable = () => {
             <td className="ps-1">{row.requestID}</td>
             <td>{row.username}</td>
             <td>{rupiahFormatter(row.amount)}</td>
-            <td>{row.paymentStatus}</td>
+            <td>{StatusIcon(row.paymentStatus)}</td>
             <td>{row.note}</td>
             <td className="text-xs">{parseDateFromNow(row.createdAt)}</td>
           </TableRow>
