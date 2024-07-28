@@ -29,7 +29,10 @@ const FinancialDetailsContent = (props: Props) => {
         <div className="text-end">
           <span className={clsx(labelClass, "text-2xs")}>Created At</span>
           <div className="-mt-1">
-            <Tooltip title={currentFinreq.created_at} arrow>
+            <Tooltip
+              title={moment(currentFinreq.created_at).format("dddd, hh:mm A")}
+              arrow
+            >
               <span className="text-xs">
                 {moment(currentFinreq.created_at).format("MMM, DD YYYY")}
               </span>
