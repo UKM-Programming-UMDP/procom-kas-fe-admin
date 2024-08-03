@@ -1,26 +1,45 @@
 import {
   BaseTable,
   TableBody,
-  TableFilter,
-  TableFilterItem,
+  // TableFilter,
+  // TableFilterItem,
   TableFooter,
   TablePagination,
   TableRow
 } from "@components/Table";
-import { useFinancialContext } from "../context";
+import { StatusIcon, useFinancialContext } from "../context";
 import { parseDateFromNow } from "@utils/dateParser";
 import { rupiahFormatter } from "@utils/stringParser";
 import useFinancialList from "./hooks/useFinancialList";
 import useFinancialFilters from "./hooks/useFinancialFilters";
 import { SearchBar } from "@components/Input";
 import useFinancialDetails from "../Details/hooks/useFinancialDetails";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import { ActionButton } from "@components/Button";
+import { useCallback, useState } from "react";
 
 const FinancialTable = () => {
   const { state } = useFinancialContext();
   const { tableData, tableHeader } = useFinancialList();
-  const { filters, handleChangeFilters, handleChangePage, handleChangeSearch } =
-    useFinancialFilters();
+  const {
+    filters,
+    handleChangeSortBy,
+    handleChangePage,
+    handleChangeSearch,
+    getFilterLabel
+  } = useFinancialFilters();
   const { handleClickRow } = useFinancialDetails();
+  const filterSortBy = filters.find((filter) => filter.key === "sort");
+  const { handleClearSortBy } = useFinancialFilters();
+  const [searchValue, setSearchValue] = useState<string>("");
+  const handleChangeSearchBar = useCallback((value: string) => {
+    setSearchValue(value);
+    handleChangeSearch(value);
+  }, []);
+  const handleClear = useCallback(() => {
+    setSearchValue("");
+    handleClearSortBy();
+  }, [handleClearSortBy]);
 
   return (
     <BaseTable>
@@ -38,38 +57,51 @@ const FinancialTable = () => {
             <td className="ps-1">{row.requestID}</td>
             <td>{row.username}</td>
             <td>{rupiahFormatter(row.amount)}</td>
-            <td>{row.paymentStatus}</td>
+            <td>{StatusIcon(row.paymentStatus)}</td>
             <td>{row.note}</td>
             <td className="text-xs">{parseDateFromNow(row.createdAt)}</td>
           </TableRow>
         ))}
       </TableBody>
       <TableFooter>
-        <TableFilter>
-          {filters.map((item, index) => (
-            <TableFilterItem
-              key={index}
-              label={item.label}
-              options={item.options}
-              value={state.filters[item.key]}
-              onChange={(value) => handleChangeFilters(item.key, value)}
-            />
-          ))}
+        <div className="absolute flex gap-2">
           <div>
-            <span>Search by Request ID</span>
-            <div className="flex gap-2 mt-1">
-              <SearchBar
-                placeholder="Request ID"
-                onChange={handleChangeSearch}
-              />
-            </div>
+            <SearchBar
+              value={searchValue}
+              placeholder="Search Request ID"
+              onChange={handleChangeSearchBar}
+            />
           </div>
-        </TableFilter>
+          <div>
+            {filterSortBy ? (
+              <div className="">
+                <div className="opacity-55 ml-1">Sort By: </div>
+                <button
+                  onClick={() =>
+                    handleChangeSortBy(filterSortBy.key, filterSortBy.value)
+                  }
+                >
+                  <FilterAltIcon sx={{ fontSize: "medium" }} />
+                  <span>{getFilterLabel ? getFilterLabel : "Created"}</span>
+                </button>
+              </div>
+            ) : (
+              <p />
+            )}
+          </div>
+        </div>
         <TablePagination
           currentPage={state.pagination.page}
           totalPage={state.pagination.total_pages}
           onChange={handleChangePage}
         />
+        <div className="absolute right-0">
+          <ActionButton
+            onClick={handleClear}
+            variant="outlined"
+            label="Clear Filter"
+          />
+        </div>
       </TableFooter>
     </BaseTable>
   );

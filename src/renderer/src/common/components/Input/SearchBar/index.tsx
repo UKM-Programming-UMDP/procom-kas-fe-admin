@@ -7,9 +7,10 @@ interface Props {
   label?: string;
   placeholder?: string;
   onChange: (value: string) => void;
+  value?: string;
 }
 const SearchBar = (props: Props) => {
-  const { className, label, placeholder, onChange } = props;
+  const { className, label, placeholder, onChange, value = "" } = props;
 
   const isFirstRender = useRef(true);
   const [tempValue, setTempValue] = useState<string>("");
@@ -23,6 +24,10 @@ const SearchBar = (props: Props) => {
     onChange(debouncedValue);
   }, [debouncedValue]);
 
+  useEffect(() => {
+    setTempValue(value);
+  }, [value]);
+
   return (
     <TextField
       className={className}
@@ -32,7 +37,7 @@ const SearchBar = (props: Props) => {
       placeholder={placeholder}
       sx={{
         "& .MuiInputBase-input": {
-          height: "1.2rem"
+          height: "0.9rem"
         },
         "& .MuiOutlinedInput-root": {
           "& input": {
