@@ -10,7 +10,7 @@ function TableFooter(props: Props) {
   return (
     <div
       className={clsx(
-        "w-full pt-2 text-xs font-semibold border-t relative",
+        "w-full pt-2 text-xs font-semibold border-t relative flex",
         className
       )}
     >

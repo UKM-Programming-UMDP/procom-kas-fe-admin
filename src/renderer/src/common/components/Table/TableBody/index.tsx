@@ -36,7 +36,7 @@ function TableBody(props: Props) {
                   header.width
                 )}
               >
-                {header.label}
+                {header.label} {header.sortBy}
               </th>
             ))}
             {disableAction ? null : <th className="w-[5rem]" />}
@@ -65,6 +65,7 @@ function TableBody(props: Props) {
 type TableHeader = {
   label: string;
   width?: string;
+  sortBy: JSX.Element | string;
 };
 
 export type { TableHeader };

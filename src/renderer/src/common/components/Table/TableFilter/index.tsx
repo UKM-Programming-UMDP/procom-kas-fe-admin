@@ -1,6 +1,7 @@
 import { ActionButton } from "@components/Button";
 import Popover from "@components/Popover";
 import clsx from "clsx";
+import useFinancialFilters from "@pages/Financial/List/hooks/useFinancialFilters";
 
 interface Props {
   children: React.ReactNode;
@@ -31,3 +32,16 @@ function TableFilter(props: Props) {
 }
 
 export default TableFilter;
+
+export function ClearFilter() {
+  const { handleClearSortBy } = useFinancialFilters();
+  return (
+    <div className="absolute right-0">
+      <ActionButton
+        onClick={handleClearSortBy}
+        variant="contained"
+        label="Clear Filter"
+      />
+    </div>
+  );
+}
