@@ -2,6 +2,7 @@ import clsx from "clsx";
 import TableRow from "../TableRow";
 import Skeleton from "react-loading-skeleton";
 import TableEmptyRow from "../TableEmptyRow";
+import { sortBy } from "../TableSortBy";
 
 interface Props {
   header: TableHeader[];
@@ -36,7 +37,9 @@ function TableBody(props: Props) {
                   header.width
                 )}
               >
-                {header.label} {header.sortBy}
+                {header.label}
+                {header.label === "status" && sortBy(2)}
+                {header.label === "date" && sortBy(1)}
               </th>
             ))}
             {disableAction ? null : <th className="w-[5rem]" />}
@@ -65,7 +68,6 @@ function TableBody(props: Props) {
 type TableHeader = {
   label: string;
   width?: string;
-  sortBy: JSX.Element | string;
 };
 
 export type { TableHeader };

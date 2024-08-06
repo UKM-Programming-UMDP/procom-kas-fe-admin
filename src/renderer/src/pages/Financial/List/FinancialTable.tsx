@@ -1,13 +1,11 @@
 import {
   BaseTable,
   TableBody,
-  // TableFilter,
-  // TableFilterItem,
   TableFooter,
   TablePagination,
   TableRow
 } from "@components/Table";
-import { StatusIcon, useFinancialContext } from "../context";
+import { useFinancialContext } from "../context";
 import { parseDateFromNow } from "@utils/dateParser";
 import { rupiahFormatter } from "@utils/stringParser";
 import useFinancialList from "./hooks/useFinancialList";
@@ -16,30 +14,28 @@ import { SearchBar } from "@components/Input";
 import useFinancialDetails from "../Details/hooks/useFinancialDetails";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import { ActionButton } from "@components/Button";
-import { useCallback, useState } from "react";
+import StatusIcon from "../partials/StatusIcon";
+import { useRef } from "react";
 
 const FinancialTable = () => {
   const { state } = useFinancialContext();
   const { tableData, tableHeader } = useFinancialList();
   const {
-    filters,
     handleChangeSortBy,
     handleChangePage,
     handleChangeSearch,
-    getFilterLabel
+    getFilterLabel,
+    getFilterSortBy,
+    handleFilterLabel
   } = useFinancialFilters();
   const { handleClickRow } = useFinancialDetails();
-  const filterSortBy = filters.find((filter) => filter.key === "sort");
   const { handleClearSortBy } = useFinancialFilters();
-  const [searchValue, setSearchValue] = useState<string>("");
-  const handleChangeSearchBar = useCallback((value: string) => {
-    setSearchValue(value);
-    handleChangeSearch(value);
-  }, []);
-  const handleClear = useCallback(() => {
-    setSearchValue("");
+  const childRef = useRef<{ onClear: () => void }>(null);
+  const handleClearButton = () => {
+    childRef.current?.onClear();
     handleClearSortBy();
-  }, [handleClearSortBy]);
+    handleFilterLabel("created_at");
+  };
 
   return (
     <BaseTable>
@@ -67,20 +63,16 @@ const FinancialTable = () => {
         <div className="absolute flex gap-2">
           <div>
             <SearchBar
-              value={searchValue}
+              ref={childRef}
               placeholder="Search Request ID"
-              onChange={handleChangeSearchBar}
+              onChange={handleChangeSearch}
             />
           </div>
           <div>
-            {filterSortBy ? (
+            {getFilterSortBy ? (
               <div className="">
                 <div className="opacity-55 ml-1">Sort By: </div>
-                <button
-                  onClick={() =>
-                    handleChangeSortBy(filterSortBy.key, filterSortBy.value)
-                  }
-                >
+                <button onClick={() => handleChangeSortBy(getFilterSortBy.key)}>
                   <FilterAltIcon sx={{ fontSize: "medium" }} />
                   <span>{getFilterLabel ? getFilterLabel : "Created"}</span>
                 </button>
@@ -97,7 +89,7 @@ const FinancialTable = () => {
         />
         <div className="absolute right-0">
           <ActionButton
-            onClick={handleClear}
+            onClick={handleClearButton}
             variant="outlined"
             label="Clear Filter"
           />

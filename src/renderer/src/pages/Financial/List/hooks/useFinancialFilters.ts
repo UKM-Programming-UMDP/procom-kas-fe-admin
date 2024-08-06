@@ -14,9 +14,11 @@ interface HookReturn {
   handleChangeFilters: (key: string, newValue: CommonOptions["value"]) => void;
   handleChangePage: (page: number) => void;
   handleChangeSearch: (value: string) => void;
-  handleChangeSortBy: (key: string, value: Array<string>) => void;
+  handleChangeSortBy: (key: string) => void;
   handleClearSortBy: () => void;
   getFilterLabel: string;
+  getFilterSortBy: FilterType | undefined;
+  handleFilterLabel: (newLabel: string) => void;
 }
 const useFinancialFilters = (): HookReturn => {
   const { setState } = useFinancialContext();
@@ -31,8 +33,7 @@ const useFinancialFilters = (): HookReturn => {
       options: [
         { label: "Created", value: "created_at" },
         { label: "Updated", value: "updated_at" }
-      ],
-      value: ["created_at", "updated_at"]
+      ]
     },
     {
       key: "order_by",
@@ -40,18 +41,7 @@ const useFinancialFilters = (): HookReturn => {
       options: [
         { label: "Newest", value: "asc" },
         { label: "Oldest", value: "desc" }
-      ],
-      value: ["asc", "desc"]
-    },
-    {
-      key: "status",
-      label: "Status",
-      options: [
-        { label: "Approved", value: "1" },
-        { label: "Rejected", value: "2" },
-        { label: "Pending", value: "3" }
-      ],
-      value: ["1", "2", "3", ""]
+      ]
     }
   ]);
 
@@ -69,8 +59,7 @@ const useFinancialFilters = (): HookReturn => {
           {
             key: "status",
             label: "Payment Status",
-            options: data,
-            value: []
+            options: data
           }
         ]);
       },
@@ -102,23 +91,32 @@ const useFinancialFilters = (): HookReturn => {
 
   const [filterLabel, setFilterLabel] = useState("");
 
-  const handleChangeSortBy = (key: string, Value: Array<string>) => {
+  const handleChangeSortBy = (key: string) => {
+    const filter = filters.find((filter) => filter.key === key);
+    if (!filter) {
+      return;
+    }
+    let optionValues = filter?.options.map((option) => option.value);
+    if (key === "status") {
+      optionValues = [...optionValues, ""];
+    }
     setState((prevState) => {
       const previousValues = prevState.filters[key];
-      const valuesOrder = Value;
-      let newValueIndex = valuesOrder.indexOf(previousValues) + 1;
-      if (newValueIndex >= valuesOrder.length) {
+      let newValueIndex = optionValues.indexOf(previousValues) + 1;
+      if (newValueIndex >= optionValues.length) {
         newValueIndex = 0;
       }
       const updatedFilters = {
         ...prevState.filters,
-        [key]: valuesOrder[newValueIndex]
+        [key]: optionValues[newValueIndex]
       };
       fetchFinancial(
         filterMapper(Object.assign(prevState.pagination, updatedFilters))
       );
 
-      FilterLabel(valuesOrder[newValueIndex]);
+      if (key === "sort") {
+        handleFilterLabel(String(optionValues[newValueIndex]));
+      }
 
       return {
         ...prevState,
@@ -127,7 +125,7 @@ const useFinancialFilters = (): HookReturn => {
     });
   };
 
-  function FilterLabel(newLabel: string): void {
+  function handleFilterLabel(newLabel: string): void {
     const currentOption = filters[0].options.find(
       (option) => option.value === newLabel
     );
@@ -137,8 +135,21 @@ const useFinancialFilters = (): HookReturn => {
   const getFilterLabel = filterLabel;
 
   const handleClearSortBy = () => {
-    handleChangeSortBy("order_by", ["asc"]);
-    handleChangeSortBy("status", []);
+    const resetFilters = {
+      order_by: "asc",
+      sort: "created_at",
+      status: ""
+    };
+    setState((prevState) => {
+      const newState = {
+        ...prevState,
+        filters: resetFilters
+      };
+      fetchFinancial(
+        filterMapper(Object.assign(prevState.pagination, resetFilters))
+      );
+      return newState;
+    });
   };
 
   const handleChangePage = (page: number) => {
@@ -190,6 +201,8 @@ const useFinancialFilters = (): HookReturn => {
     });
   };
 
+  const getFilterSortBy = filters.find((filter) => filter.key === "sort");
+
   return {
     filters,
     handleChangeFilters,
@@ -198,7 +211,9 @@ const useFinancialFilters = (): HookReturn => {
     handleChangeSearch,
     handleChangeSortBy,
     handleClearSortBy,
-    getFilterLabel
+    getFilterLabel,
+    getFilterSortBy,
+    handleFilterLabel
   };
 };
 

@@ -1,16 +1,27 @@
 import useDebouncer from "@hooks/useDebouncer";
 import { TextField } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
+import { forwardRef, useImperativeHandle } from "react";
 
 interface Props {
   className?: string;
   label?: string;
   placeholder?: string;
   onChange: (value: string) => void;
-  value?: string;
 }
-const SearchBar = (props: Props) => {
-  const { className, label, placeholder, onChange, value = "" } = props;
+
+interface RefObject {
+  onClear: () => void;
+}
+
+const SearchBar = forwardRef<RefObject, Props>((props, ref) => {
+  const { className, label, placeholder, onChange } = props;
+
+  useImperativeHandle(ref, () => ({
+    onClear() {
+      setTempValue("");
+    }
+  }));
 
   const isFirstRender = useRef(true);
   const [tempValue, setTempValue] = useState<string>("");
@@ -24,10 +35,6 @@ const SearchBar = (props: Props) => {
     onChange(debouncedValue);
   }, [debouncedValue]);
 
-  useEffect(() => {
-    setTempValue(value);
-  }, [value]);
-
   return (
     <TextField
       className={className}
@@ -37,7 +44,7 @@ const SearchBar = (props: Props) => {
       placeholder={placeholder}
       sx={{
         "& .MuiInputBase-input": {
-          height: "0.9rem"
+          height: "1.2rem"
         },
         "& .MuiOutlinedInput-root": {
           "& input": {
@@ -48,6 +55,7 @@ const SearchBar = (props: Props) => {
       }}
     />
   );
-};
+});
+SearchBar.displayName = "SearchBar";
 
 export default SearchBar;

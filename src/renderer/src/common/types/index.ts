@@ -31,7 +31,6 @@ export type FilterType = {
   key: string;
   label: string;
   options: CommonOptions[];
-  value: Array<string>;
 };
 
 export type DataWithPagination<T> = {

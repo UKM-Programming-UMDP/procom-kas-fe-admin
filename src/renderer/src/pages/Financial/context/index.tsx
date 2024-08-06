@@ -1,9 +1,6 @@
 import { FinancialModel } from "@api/financial/model";
 import useDialog, { UseDialogReturn } from "@hooks/useDialog";
 import { CommonOptions } from "@types";
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 
 import {
   Dispatch,
@@ -110,24 +107,3 @@ const FinancialProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
 export { FinancialProvider, useFinancialContext };
 export type { StateType };
-
-export function StatusIcon(status: string): JSX.Element {
-  let icon;
-  const commonIconStyle = {
-    fontSize: "medium",
-    opacity: 0.5
-  };
-  if (status === "Rejected") {
-    icon = <ErrorOutlineIcon color="error" sx={commonIconStyle} />;
-  } else if (status === "Pending") {
-    icon = <WarningAmberIcon color="warning" sx={commonIconStyle} />;
-  } else {
-    icon = <CheckCircleOutlineIcon color="success" sx={commonIconStyle} />;
-  }
-
-  return (
-    <>
-      {icon} {status}
-    </>
-  );
-}

@@ -5,17 +5,16 @@ export function sortBy(index: number) {
   const { handleChangeSortBy, filters } = useFinancialFilters();
   const firstFilter = filters[index];
   function handleSortItem() {
-    handleChangeSortBy(firstFilter.key, firstFilter.value);
+    handleChangeSortBy(firstFilter.key);
   }
 
   return (
-    <>
-      <SwapVertIcon
-        sx={{
-          fontSize: "medium"
-        }}
-        onClick={handleSortItem}
-      />
-    </>
+    <SwapVertIcon
+      role="button"
+      sx={{
+        fontSize: "medium"
+      }}
+      onClick={handleSortItem}
+    />
   );
 }
