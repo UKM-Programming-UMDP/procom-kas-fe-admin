@@ -6,6 +6,7 @@ import { snackbar } from "@utils/snackbar";
 import { useEffect, useState } from "react";
 import { filterMapper } from "../utils/filterMapper";
 import FinancialService from "@api/financial/service";
+import useFinancialDetails from "@pages/Financial/Details/hooks/useFinancialDetails";
 
 interface HookReturn {
   filters: FilterType[];
@@ -13,6 +14,11 @@ interface HookReturn {
   handleChangeFilters: (key: string, newValue: CommonOptions["value"]) => void;
   handleChangePage: (page: number) => void;
   handleChangeSearch: (value: string) => void;
+  handleChangeSortBy: (key: string) => void;
+  handleClearSortBy: () => void;
+  getFilterLabel: string;
+  getFilterSortBy: FilterType | undefined;
+  handleFilterLabel: (newLabel: string) => void;
 }
 const useFinancialFilters = (): HookReturn => {
   const { setState } = useFinancialContext();
@@ -83,6 +89,69 @@ const useFinancialFilters = (): HookReturn => {
     });
   };
 
+  const [filterLabel, setFilterLabel] = useState("");
+
+  const handleChangeSortBy = (key: string) => {
+    const filter = filters.find((filter) => filter.key === key);
+    if (!filter) {
+      return;
+    }
+    let optionValues = filter?.options.map((option) => option.value);
+    if (key === "status") {
+      optionValues = [...optionValues, ""];
+    }
+    setState((prevState) => {
+      const previousValues = prevState.filters[key];
+      let newValueIndex = optionValues.indexOf(previousValues) + 1;
+      if (newValueIndex >= optionValues.length) {
+        newValueIndex = 0;
+      }
+      const updatedFilters = {
+        ...prevState.filters,
+        [key]: optionValues[newValueIndex]
+      };
+      fetchFinancial(
+        filterMapper(Object.assign(prevState.pagination, updatedFilters))
+      );
+
+      if (key === "sort") {
+        handleFilterLabel(String(optionValues[newValueIndex]));
+      }
+
+      return {
+        ...prevState,
+        filters: updatedFilters
+      };
+    });
+  };
+
+  function handleFilterLabel(newLabel: string): void {
+    const currentOption = filters[0].options.find(
+      (option) => option.value === newLabel
+    );
+    const currentLabel = currentOption ? currentOption.label : "";
+    setFilterLabel(currentLabel);
+  }
+  const getFilterLabel = filterLabel;
+
+  const handleClearSortBy = () => {
+    const resetFilters = {
+      order_by: "asc",
+      sort: "created_at",
+      status: ""
+    };
+    setState((prevState) => {
+      const newState = {
+        ...prevState,
+        filters: resetFilters
+      };
+      fetchFinancial(
+        filterMapper(Object.assign(prevState.pagination, resetFilters))
+      );
+      return newState;
+    });
+  };
+
   const handleChangePage = (page: number) => {
     setState((prevState) => {
       const updatedPagination = {
@@ -98,6 +167,7 @@ const useFinancialFilters = (): HookReturn => {
     });
   };
 
+  const { handleClickRow } = useFinancialDetails();
   const handleChangeSearch = (value: string) => {
     if (value === "") {
       fetchFinancial();
@@ -119,6 +189,7 @@ const useFinancialFilters = (): HookReturn => {
           financialRequest: [data],
           financialRequestLoading: false
         }));
+        handleClickRow(data.request_id);
       },
       onError: (errMessage) => {
         snackbar.error(errMessage);
@@ -130,12 +201,19 @@ const useFinancialFilters = (): HookReturn => {
     });
   };
 
+  const getFilterSortBy = filters.find((filter) => filter.key === "sort");
+
   return {
     filters,
     handleChangeFilters,
     fetchFilterOptions,
     handleChangePage,
-    handleChangeSearch
+    handleChangeSearch,
+    handleChangeSortBy,
+    handleClearSortBy,
+    getFilterLabel,
+    getFilterSortBy,
+    handleFilterLabel
   };
 };
 

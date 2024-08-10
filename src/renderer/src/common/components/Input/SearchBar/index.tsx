@@ -1,6 +1,7 @@
 import useDebouncer from "@hooks/useDebouncer";
 import { TextField } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
+import { forwardRef, useImperativeHandle } from "react";
 
 interface Props {
   className?: string;
@@ -8,8 +9,19 @@ interface Props {
   placeholder?: string;
   onChange: (value: string) => void;
 }
-const SearchBar = (props: Props) => {
+
+interface RefObject {
+  onClear: () => void;
+}
+
+const SearchBar = forwardRef<RefObject, Props>((props, ref) => {
   const { className, label, placeholder, onChange } = props;
+
+  useImperativeHandle(ref, () => ({
+    onClear() {
+      setTempValue("");
+    }
+  }));
 
   const isFirstRender = useRef(true);
   const [tempValue, setTempValue] = useState<string>("");
@@ -43,6 +55,7 @@ const SearchBar = (props: Props) => {
       }}
     />
   );
-};
+});
+SearchBar.displayName = "SearchBar";
 
 export default SearchBar;

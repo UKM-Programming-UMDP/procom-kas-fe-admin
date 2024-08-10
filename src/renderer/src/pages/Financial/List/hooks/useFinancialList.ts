@@ -15,9 +15,9 @@ const useFinancialList = (): HookReturn => {
     { label: "id", width: "w-20" },
     { label: "username", width: "w-44" },
     { label: "amount", width: "w-32" },
-    { label: "status", width: "w-24" },
+    { label: "status", width: "w-28" },
     { label: "note", width: "w-52" },
-    { label: "date", width: "w-28" }
+    { label: "date", width: "w-24" }
   ];
 
   const handleEditFinreqDetails = () => {
